@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:bwa_coyz/theme.dart';
-import 'package:bwa_coyz/pages/login_page.dart';
+import 'package:kos_hunter/theme.dart';
+import 'package:kos_hunter/pages/login_page.dart';
 
 void main() {
   runApp(const MyApp());
