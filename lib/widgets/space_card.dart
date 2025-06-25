@@ -1,7 +1,7 @@
-import 'package:bwa_coyz/pages/detail_page.dart';
+import 'package:kos_hunter/pages/detail_page.dart';
 import 'package:flutter/material.dart';
-import 'package:bwa_coyz/theme.dart';
-import 'package:bwa_coyz/models/space.dart';
+import 'package:kos_hunter/theme.dart';
+import 'package:kos_hunter/models/space.dart';
 
 class SpaceCard extends StatelessWidget {
 
