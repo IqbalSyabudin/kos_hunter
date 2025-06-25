@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:kos_hunter/theme.dart';
-=======
-import 'package:kost/theme.dart';
->>>>>>> 7c2565e0945b92a84568d1899517aae39c99ac3a
 
 class FacilityItem extends StatelessWidget {
   final String name;
