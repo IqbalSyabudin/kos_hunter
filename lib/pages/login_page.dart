@@ -116,7 +116,7 @@ class LoginPage extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton.icon(
                   onPressed: () {},
-                  icon: Image.asset('assets/google_icon.png', height: 24),
+                  icon: Image.asset('assets/google.png', height: 24),
                   label: Text(
                     'Google',
                     style: whiteTextStyle.copyWith(
