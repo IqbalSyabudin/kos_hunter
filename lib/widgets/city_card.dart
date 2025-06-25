@@ -1,6 +1,6 @@
-import 'package:bwa_coyz/theme.dart';
+import 'package:kos_hunter/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:bwa_coyz/models/city.dart';
+import 'package:kos_hunter/models/city.dart';
 
 class CityCard extends StatelessWidget {
   final City city;

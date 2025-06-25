@@ -1,5 +1,5 @@
-import 'package:bwa_coyz/theme.dart';
-import 'package:bwa_coyz/widgets/facility.item.dart';
+import 'package:kos_hunter/theme.dart';
+import 'package:kos_hunter/widgets/facility.item.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 

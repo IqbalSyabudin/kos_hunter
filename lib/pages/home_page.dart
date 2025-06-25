@@ -1,12 +1,12 @@
-import 'package:bwa_coyz/models/space.dart';
-import 'package:bwa_coyz/models/tips.dart';
-import 'package:bwa_coyz/theme.dart';
-import 'package:bwa_coyz/widgets/bottom_navbar_item.dart';
-import 'package:bwa_coyz/widgets/tips_card.dart';
+import 'package:kos_hunter/models/space.dart';
+import 'package:kos_hunter/models/tips.dart';
+import 'package:kos_hunter/theme.dart';
+import 'package:kos_hunter/widgets/bottom_navbar_item.dart';
+import 'package:kos_hunter/widgets/tips_card.dart';
 import 'package:flutter/material.dart';
-import 'package:bwa_coyz/widgets/city_card.dart';
-import 'package:bwa_coyz/widgets/space_card.dart';
-import 'package:bwa_coyz/models/city.dart';
+import 'package:kos_hunter/widgets/city_card.dart';
+import 'package:kos_hunter/widgets/space_card.dart';
+import 'package:kos_hunter/models/city.dart';
 
 
 class HomePage extends StatelessWidget {

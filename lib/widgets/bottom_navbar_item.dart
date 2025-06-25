@@ -1,4 +1,4 @@
-import 'package:bwa_coyz/theme.dart';
+import 'package:kos_hunter/theme.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavbarItem extends StatelessWidget {
