@@ -1,5 +1,5 @@
-import 'package:bwa_coyz/theme.dart';
-import 'package:bwa_coyz/pages/home_page.dart';
+import 'package:kos_hunter/theme.dart';
+import 'package:kos_hunter/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatelessWidget {
