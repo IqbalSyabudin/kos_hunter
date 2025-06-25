@@ -1,32 +1,29 @@
 import 'package:kos_hunter/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:kos_hunter/pages/home_page.dart';
+import 'package:kos_hunter/pages/splash_page.dart';
 
 class LoginPage extends StatelessWidget {
+  // Tambahkan controller
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
       body: SafeArea(
         child: Padding(
-          padding:
-           EdgeInsets.symmetric(
-            horizontal: 30
-            ),
+          padding: EdgeInsets.symmetric(horizontal: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 40
-                ),
+              SizedBox(height: 40),
               Container(
                 height: 70,
                 width: 120,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(
-                      'assets/logo_new2.png'
-                      ),
+                    image: AssetImage('assets/logo_new2.png'),
                   ),
                 ),
               ),
@@ -46,6 +43,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 40),
+              // Username TextField
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
@@ -53,6 +51,7 @@ class LoginPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: TextField(
+                  controller: usernameController, // pakai controller
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Username',
@@ -61,6 +60,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16),
+              // Password TextField
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
@@ -68,6 +68,7 @@ class LoginPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: TextField(
+                  controller: passwordController, // pakai controller
                   obscureText: true,
                   decoration: InputDecoration(
                     border: InputBorder.none,
@@ -93,7 +94,24 @@ class LoginPage extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navigasi ke HomePage kalau mau
+                    // Cek apakah username & password sudah diisi
+                    if (usernameController.text.isNotEmpty &&
+                        passwordController.text.isNotEmpty) {
+                      // Kalau sudah diisi → Navigasi ke SplashPage
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SplashPage(),
+                        ),
+                      );
+                    } else {
+                      // Kalau kosong, kasih alert/snackbar
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Mohon isi Username dan Password'),
+                        ),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: yellowGreenColor,
@@ -110,13 +128,14 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
+              // Tombol Google & Facebook tetap seperti punyamu
               SizedBox(height: 16),
               Container(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton.icon(
                   onPressed: () {},
-                  icon: Image.asset('assets/google_icon.png', height: 24),
+                  icon: Image.asset('assets/google.png', height: 24),
                   label: Text(
                     'Google',
                     style: whiteTextStyle.copyWith(
@@ -147,7 +166,7 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF1877F2), // Warna biru Facebook
+                    backgroundColor: Color(0xFF1877F2),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
