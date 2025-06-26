@@ -1,4 +1,4 @@
-package com.example.kos_hunter
+package com.flussy.koshunter
 
 import io.flutter.embedding.android.FlutterActivity
 
