@@ -1,5 +1,6 @@
-import 'package:kos_hunter/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:kos_hunter/theme.dart';
 import 'package:kos_hunter/pages/splash_page.dart';
 
 class LoginPage extends StatelessWidget {
@@ -68,7 +69,7 @@ class LoginPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: TextField(
-                  controller: passwordController, // pakai controller
+                  controller: passwordController, 
                   obscureText: true,
                   decoration: InputDecoration(
                     border: InputBorder.none,
@@ -128,13 +129,32 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
-              // Tombol Google & Facebook tetap seperti punyamu
+              // Tombol Google 
               SizedBox(height: 16),
               Container(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () async {
+                    try {
+                      final supabase = Supabase.instance.client;
+                      await supabase.auth.signInWithOAuth(Provider.google);
+
+                      final user = supabase.auth.currentUser;
+                      if (user != null) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => SplashPage()),
+                        );
+                      }
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Gagal login dengan Google: $e'),
+                        ),
+                      );
+                    }
+                  },
                   icon: Image.asset('assets/google.png', height: 24),
                   label: Text(
                     'Google',
@@ -152,11 +172,23 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/register');
+                },
+                child: Text(
+                  'Belum punya akun? Daftar di sini',
+                  style: greyTextStyle.copyWith(fontSize: 14),
+                ),
+              ),
+              SizedBox(height: 16),
               Container(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    // Kosongkan jika belum ada login facebook
+                  },
                   icon: Icon(Icons.facebook, color: Colors.white, size: 24),
                   label: Text(
                     'facebook',
