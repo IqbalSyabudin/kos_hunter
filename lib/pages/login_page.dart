@@ -4,7 +4,6 @@ import 'package:kos_hunter/theme.dart';
 import 'package:kos_hunter/pages/splash_page.dart';
 
 class LoginPage extends StatelessWidget {
-  // Tambahkan controller
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -44,7 +43,6 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 40),
-              // Username TextField
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
@@ -52,7 +50,7 @@ class LoginPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: TextField(
-                  controller: usernameController, // pakai controller
+                  controller: usernameController,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Username',
@@ -61,7 +59,6 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16),
-              // Password TextField
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
@@ -69,7 +66,7 @@ class LoginPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: TextField(
-                  controller: passwordController, 
+                  controller: passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
                     border: InputBorder.none,
@@ -95,10 +92,8 @@ class LoginPage extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Cek apakah username & password sudah diisi
                     if (usernameController.text.isNotEmpty &&
                         passwordController.text.isNotEmpty) {
-                      // Kalau sudah diisi → Navigasi ke SplashPage
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -106,7 +101,6 @@ class LoginPage extends StatelessWidget {
                         ),
                       );
                     } else {
-                      // Kalau kosong, kasih alert/snackbar
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Mohon isi Username dan Password'),
@@ -129,19 +123,40 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
-              // Tombol Google 
               SizedBox(height: 16),
               Container(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton.icon(
                   onPressed: () async {
+                    final supabase = Supabase.instance.client;
                     try {
-                      final supabase = Supabase.instance.client;
                       await supabase.auth.signInWithOAuth(Provider.google);
 
                       final user = supabase.auth.currentUser;
+
                       if (user != null) {
+                        // Insert ke tabel 'users' jika belum ada
+                        final userData = {
+                          'user_id': user.id,
+                          'full_name': user.userMetadata?['name'] ?? 'Guest',
+                          'phone': user.phone ?? '',
+                          'updated_at': DateTime.now().toIso8601String(),
+                        };
+
+                        final existing = await supabase
+                            .from('users')
+                            .select()
+                            .eq('user_id', user.id)
+                            .maybeSingle();
+
+                        if (existing == null) {
+                          final res = await supabase.from('users').insert(userData);
+                          if (res.error != null) {
+                            throw res.error!;
+                          }
+                        }
+
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => SplashPage()),

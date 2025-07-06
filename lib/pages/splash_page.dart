@@ -34,7 +34,7 @@ class SplashPage extends StatelessWidget {
                   ),
                   SizedBox(height: 30),
                   Text(
-                    'Temukan Kos yang \nNyaman untuk Tinggal dan Bahagia',
+                    'Temukan Kos yang \nNyaman untuk Tinggal',
                     style: blackTextStyle.copyWith(
                       fontSize: 24,
                     ),
