@@ -11,16 +11,20 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
 
   bool isLoading = false;
 
   Future<void> register() async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
+    final fullName = nameController.text.trim();
+    final phone = phoneController.text.trim();
 
-    if (email.isEmpty || password.isEmpty) {
+    if (email.isEmpty || password.isEmpty || fullName.isEmpty || phone.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Email dan Password tidak boleh kosong')),
+        SnackBar(content: Text('Semua field harus diisi')),
       );
       return;
     }
@@ -34,8 +38,17 @@ class _RegisterPageState extends State<RegisterPage> {
         password: password,
       );
 
-      if (response.user != null) {
-        // Daftar berhasil → ke SplashPage
+      final userId = response.user?.id;
+      if (userId != null) {
+        // Simpan ke tabel user_profile
+        await supabase.from('user_profile').insert({
+          'user_id': userId,
+          'full_name': fullName,
+          'phone': phone,
+          'updated_at': DateTime.now().toIso8601String(),
+        });
+
+        // Jika berhasil → ke SplashPage
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => SplashPage()),
@@ -57,8 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: ListView(
             children: [
               SizedBox(height: 40),
               Container(
@@ -81,46 +93,26 @@ class _RegisterPageState extends State<RegisterPage> {
               SizedBox(height: 8),
               Text(
                 'Please register to continue',
-                style: greyTextStyle.copyWith(
-                  fontSize: 16,
-                ),
+                style: greyTextStyle.copyWith(fontSize: 16),
               ),
               SizedBox(height: 40),
-              // Email Field
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  color: blueColor,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Email',
-                    hintStyle: whiteTextStyle,
-                  ),
-                ),
-              ),
+
+              // Email
+              buildInputField('Email', emailController),
               SizedBox(height: 16),
-              // Password Field
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  color: blueColor,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Password',
-                    hintStyle: whiteTextStyle,
-                  ),
-                ),
-              ),
+
+              // Password
+              buildInputField('Password', passwordController, isPassword: true),
+              SizedBox(height: 16),
+
+              // Full Name
+              buildInputField('Nama Lengkap', nameController),
+              SizedBox(height: 16),
+
+              // Phone
+              buildInputField('Nomor HP', phoneController, keyboardType: TextInputType.phone),
               SizedBox(height: 20),
+
               SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -145,9 +137,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               SizedBox(height: 16),
               TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // kembali ke halaman login
-                },
+                onPressed: () => Navigator.pop(context),
                 child: Text(
                   'Sudah punya akun? Login di sini',
                   style: greyTextStyle,
@@ -155,6 +145,27 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildInputField(String hint, TextEditingController controller,
+      {bool isPassword = false, TextInputType keyboardType = TextInputType.text}) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        color: blueColor,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: TextField(
+        controller: controller,
+        obscureText: isPassword,
+        keyboardType: keyboardType,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: hint,
+          hintStyle: whiteTextStyle,
         ),
       ),
     );
