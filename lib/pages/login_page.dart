@@ -131,7 +131,7 @@ class LoginPage extends StatelessWidget {
                   onPressed: () async {
                     final supabase = Supabase.instance.client;
                     try {
-                      await supabase.auth.signInWithOAuth(Provider.google);
+                      await supabase.auth.signInWithOAuth(OAuthProvider.google);
 
                       final user = supabase.auth.currentUser;
 
