@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kos_hunter/theme.dart';
 import 'package:kos_hunter/pages/login_page.dart';
 import 'package:kos_hunter/pages/register_page.dart';
+import 'package:kos_hunter/pages/notification_page.dart';
+import 'package:kos_hunter/pages/profile_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -24,6 +26,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
+        '/notifications': (context) => NotificationPage(),
+        '/profile': (context) => ProfilePage(),
       },
     );
   }}
