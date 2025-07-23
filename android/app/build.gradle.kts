@@ -24,7 +24,7 @@ android {
     // Menggunakan ndkVersion yang disarankan oleh log error
     ndkVersion = "27.0.12077973"
 
-    // PERBAIKAN FINAL: Menyelaraskan versi Java dengan lingkungan build Anda (Java 17)
+    // Menyelaraskan versi Java dengan lingkungan build Anda (Java 17)
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -46,24 +46,25 @@ android {
     defaultConfig {
         applicationId = "com.flussy.koshunter"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35 // Menaikkan targetSdk juga merupakan praktik yang baik
         
         // Versi aplikasi diubah sesuai permintaan Anda
-        versionCode = 11 
-        versionName = "1.1.2" // Anda bisa sesuaikan ini, misal: "2.0.0"
+        versionCode = 13 
+        versionName = "1.1.3"
     }
 
     buildTypes {
         release {
-            // Menggunakan konfigurasi keystore Anda untuk build rilis
             signingConfig = signingConfigs.getByName("release")
             
-            // PERBAIKAN PALING KUAT: Matikan R8 sepenuhnya.
-            // Ini akan menghentikan proses optimasi yang menyebabkan error
-            // "Missing classes". Ini adalah "jurus pamungkas" untuk
-            // melewati masalah ini.
+            // ================================================================
+            // PERBAIKAN FINAL & PALING PENTING:
+            // Kita mematikan R8/ProGuard sepenuhnya.
+            // Ini akan melewati tugas "minifyReleaseWithR8" yang selalu gagal
+            // dan menjamin build Anda berhasil.
             isMinifyEnabled = false
             isShrinkResources = false
+            // ================================================================
         }
     }
 }

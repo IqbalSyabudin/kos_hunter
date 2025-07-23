@@ -19,15 +19,11 @@
 -keep class io.realtime.** { *; }
 -keep class io.storage.** { *; }
 
-# Aturan untuk library jaringan yang digunakan Supabase (OkHttp, dll.)
+# Aturan untuk library jaringan yang digunakan (OkHttp, dll.)
 -keepnames class okhttp3.** { *; }
 -keepnames interface okhttp3.** { *; }
 -dontwarn okhttp3.**
 -dontwarn okio.**
-
-# Aturan untuk library JSON (Gson/Moshi) yang mungkin digunakan
--keep class com.google.gson.** { *; }
--keep class com.squareup.moshi.** { *; }
 
 # Aturan untuk menjaga model data Anda
 -keep class com.flussy.koshunter.models.** { *; }
