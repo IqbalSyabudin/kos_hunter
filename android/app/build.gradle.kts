@@ -49,8 +49,8 @@ android {
         targetSdk = 35 // Menaikkan targetSdk juga merupakan praktik yang baik
         
         // Versi aplikasi diubah sesuai permintaan Anda
-        versionCode = 14
-        versionName = "1.1.4"
+        versionCode = 15
+        versionName = "1.1.5"
     }
 
     buildTypes {

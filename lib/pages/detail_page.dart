@@ -68,7 +68,7 @@ class DetailPage extends StatelessWidget {
                                 SizedBox(height: 2),
                                 Text.rich(
                                   TextSpan(
-                                    text: '\$${space.price}',
+                                    text: 'Rp ${space.price}',
                                     style: purpleTextStyle.copyWith(fontSize: 16),
                                     children: [
                                       TextSpan(
