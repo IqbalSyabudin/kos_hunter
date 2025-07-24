@@ -4,6 +4,8 @@ import 'package:kos_hunter/theme.dart';
 import 'package:kos_hunter/pages/splash_page.dart';
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key}); // Praktik terbaik: tambahkan super.key
+
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
@@ -23,9 +25,11 @@ class _RegisterPageState extends State<RegisterPage> {
     final phone = phoneController.text.trim();
 
     if (email.isEmpty || password.isEmpty || fullName.isEmpty || phone.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Semua field harus diisi')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Semua field harus diisi')),
+        );
+      }
       return;
     }
 
@@ -33,56 +37,63 @@ class _RegisterPageState extends State<RegisterPage> {
 
     try {
       final supabase = Supabase.instance.client;
+
+      // ================== PERUBAHAN UTAMA DI SINI ==================
+      // Kita sekarang mengirim 'full_name' dan 'phone' sebagai metadata
+      // Pemicu di Supabase akan menangani sisanya.
       final response = await supabase.auth.signUp(
         email: email,
         password: password,
-      );
-
-      final userId = response.user?.id;
-      if (userId != null) {
-        // Simpan ke tabel user_profile
-        await supabase.from('user_profile').insert({
-          'user_id': userId,
+        data: {
           'full_name': fullName,
-          'phone': phone,
-          'updated_at': DateTime.now().toIso8601String(),
-        });
+          'phone': phone, // Kirim nomor telepon juga sebagai metadata
+        },
+      );
+      // ==========================================================
 
-        // Jika berhasil → ke SplashPage
+      // Setelah mendaftar, langsung arahkan ke halaman berikutnya.
+      // Kita tidak perlu lagi memeriksa user ID atau melakukan insert manual.
+      if (mounted) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => SplashPage()),
         );
       }
+
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal daftar: ${e.toString()}')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal daftar: ${e.toString()}')),
+        );
+      }
     } finally {
-      setState(() => isLoading = false);
+      if (mounted) {
+        setState(() => isLoading = false);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // ... sisa kode build() Anda tidak perlu diubah, sudah bagus ...
     return Scaffold(
       backgroundColor: whiteColor,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 30),
           child: ListView(
             children: [
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Container(
                 height: 70,
                 width: 120,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/logo_new2.png'),
                   ),
                 ),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Text(
                 'Create Account',
                 style: blackTextStyle.copyWith(
@@ -90,28 +101,28 @@ class _RegisterPageState extends State<RegisterPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 'Please register to continue',
                 style: greyTextStyle.copyWith(fontSize: 16),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
 
               // Email
               buildInputField('Email', emailController),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Password
               buildInputField('Password', passwordController, isPassword: true),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Full Name
               buildInputField('Nama Lengkap', nameController),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Phone
               buildInputField('Nomor HP', phoneController, keyboardType: TextInputType.phone),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               SizedBox(
                 width: double.infinity,
@@ -125,7 +136,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   child: isLoading
-                      ? CircularProgressIndicator(color: Colors.white)
+                      ? const CircularProgressIndicator(color: Colors.white)
                       : Text(
                           'Register',
                           style: blueTextStyle.copyWith(
@@ -135,7 +146,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text(
@@ -153,7 +164,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget buildInputField(String hint, TextEditingController controller,
       {bool isPassword = false, TextInputType keyboardType = TextInputType.text}) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: blueColor,
         borderRadius: BorderRadius.circular(15),
@@ -162,6 +173,7 @@ class _RegisterPageState extends State<RegisterPage> {
         controller: controller,
         obscureText: isPassword,
         keyboardType: keyboardType,
+        style: whiteTextStyle, // Menambahkan style agar teks input berwarna putih
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hint,
